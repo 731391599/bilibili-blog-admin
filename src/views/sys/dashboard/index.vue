@@ -1,0 +1,42 @@
+<template>
+  <div>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+    <h1>dashboard</h1>
+  </div>
+</template>
+
+<style></style>

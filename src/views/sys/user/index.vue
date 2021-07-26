@@ -142,6 +142,7 @@ export default {
         { prop: "updatedAt", label: "更新时间", formatter: "time" },
       ],
       api: "user_list",
+      btns: ["delete", "update"],
     };
     const queryOptions = [
       {

@@ -26,6 +26,7 @@
 
             <template v-if="column.scope === 'actions'">
               <el-button
+                v-if="options.btns.includes('show')"
                 type="success"
                 icon="el-icon-search"
                 circle
@@ -33,6 +34,7 @@
               ></el-button>
 
               <el-button
+                v-if="options.btns.includes('update')"
                 type="primary"
                 icon="el-icon-edit"
                 circle
@@ -40,6 +42,7 @@
               ></el-button>
 
               <el-button
+                v-if="options.btns.includes('delete')"
                 type="danger"
                 icon="el-icon-delete"
                 circle
@@ -66,9 +69,11 @@
 
 <script>
 import { user_list } from "@/api/user";
+import { category_list } from "@/api/category";
 import { parseTime } from "@/utils";
 const apiList = {
   user_list,
+  category_list,
 };
 export default {
   props: {

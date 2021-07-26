@@ -2,11 +2,11 @@
   <!-- 根据路由 渲染菜单 -->
   <!-- 我们需要菜单的名字和图标 -->
   <el-menu :collapse="isCollapse" :collapse-transition="false" router>
-    <template v-for="route in routes">
+    <template v-for="route in asyncRoutes">
       <!-- 判断是否有子路有 -->
       <!-- 没有子路有 -->
       <el-menu-item
-        v-if="!route.children"
+        v-if="!route.children.length"
         :key="route.path"
         :index="route.path"
       >
@@ -36,14 +36,7 @@
 import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["isCollapse"]),
-    routes() {
-      const routes = this.$router.options.routes[1].children.filter((item) => {
-        return !item.hide;
-      });
-
-      return routes;
-    },
+    ...mapGetters(["isCollapse", "asyncRoutes"]),
   },
 };
 </script>

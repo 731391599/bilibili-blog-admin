@@ -70,10 +70,13 @@
 <script>
 import { user_list } from "@/api/user";
 import { category_list } from "@/api/category";
+import { article_list, article_list_all } from "@/api/article";
 import { parseTime } from "@/utils";
 const apiList = {
   user_list,
   category_list,
+  article_list,
+  article_list_all,
 };
 export default {
   props: {

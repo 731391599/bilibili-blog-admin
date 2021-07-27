@@ -49,7 +49,7 @@
       :before-close="handleUserShowColose"
       :show-close="false"
     >
-      <el-form :model="userInfo" label-width="4vw">
+      <el-form :model="userInfo" label-width="8vw">
         <el-form-item label="ID" prop="id">
           <div>{{ userInfo.id }}</div>
         </el-form-item>
@@ -107,7 +107,7 @@
       "
       :show-close="false"
     >
-      <el-form :model="user" ref="ruleForm" :rules="rules" label-width="4vw">
+      <el-form :model="user" ref="ruleForm" :rules="rules" label-width="8vw">
         <el-form-item label="账号" prop="username">
           <el-input v-model="user.username"></el-input>
         </el-form-item>
@@ -142,7 +142,7 @@ export default {
         { prop: "updatedAt", label: "更新时间", formatter: "time" },
       ],
       api: "user_list",
-      btns: ["delete", "update"],
+      btns: ["show", "delete", "update"],
     };
     const queryOptions = [
       {

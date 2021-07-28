@@ -24,6 +24,14 @@
               <el-tag v-else type="danger" size="medium">禁用</el-tag>
             </template>
 
+            <template v-if="column.scope === 'article-status'">
+              <el-tag
+                size="medium"
+                effect="dark"
+                :type="articleStatus[scope.row.status].type"
+                >{{ articleStatus[scope.row.status].text }}</el-tag
+              >
+            </template>
             <template v-if="column.scope === 'actions'">
               <el-button
                 v-if="options.btns.includes('show')"
@@ -72,6 +80,7 @@ import { user_list } from "@/api/user";
 import { category_list } from "@/api/category";
 import { article_list, article_list_all } from "@/api/article";
 import { parseTime } from "@/utils";
+
 const apiList = {
   user_list,
   category_list,
@@ -88,6 +97,29 @@ export default {
     },
   },
   data() {
+    const articleStatus = {
+      0: {
+        text: "草稿",
+        type: "info",
+      },
+      1: {
+        text: "审核中",
+        type: "primary",
+      },
+      2: {
+        text: "审核通过",
+        type: "success",
+      },
+      3: {
+        text: "审核拒绝",
+        type: "danger",
+      },
+      4: {
+        text: "已发布",
+        type: "warning",
+      },
+    };
+
     return {
       page: {
         pageSize: 10,
@@ -95,25 +127,26 @@ export default {
       },
       tableData: [],
       total: 0,
+      articleStatus,
     };
   },
   mounted() {
     this.init();
   },
   methods: {
-    init(key, keywords) {
+    init(queryObj) {
       // 初始化数据
       this.page = {
         pageSize: 10,
         pageNum: 1,
       };
-      this.getList(key, keywords);
+      this.getList(queryObj);
     },
-    getList(key, keywords) {
-      const data = { ...this.page };
-      if (key) {
-        data.key = key;
-        data.keywords = keywords;
+    getList(queryObj) {
+      let data = { ...this.page };
+      if (queryObj) {
+        // 合并参数
+        data = Object.assign(data, queryObj);
       }
       apiList[this.options.api](data).then((res) => {
         this.tableData = res.data.rows;

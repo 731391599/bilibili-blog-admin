@@ -238,15 +238,24 @@ export default {
     },
     handleSearch(type) {
       if (type === "query") {
-        this.$refs["table"].init(this.key, this.keywords);
+        this.$refs["table"].init({
+          key: this.key,
+          keywords: this.keywords,
+        });
       } else if (type === "all") {
         this.$refs["table"].init();
         this.keywords = "";
       } else if (type === 1) {
-        this.$refs["table"].init("status", 1);
+        this.$refs["table"].init({
+          key: "status",
+          keywords: 1,
+        });
         this.keywords = "";
       } else if (type === 0) {
-        this.$refs["table"].init("status", 0);
+        this.$refs["table"].init({
+          key: "status",
+          keywords: 0,
+        });
         this.keywords = "";
       }
     },

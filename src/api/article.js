@@ -64,3 +64,10 @@ export function article_delete(id) {
     method: "delete",
   });
 }
+
+export function article_show(id) {
+  return request({
+    url: `${url.article}/${id}`,
+    method: "get",
+  });
+}

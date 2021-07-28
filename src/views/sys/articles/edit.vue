@@ -56,8 +56,12 @@
         <mavon-editor v-model="articleForm.content" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="save(0)">保存至草稿箱</el-button>
-        <el-button type="danger" @click="save(1)">提交审核</el-button>
+        <el-button type="primary" :loading="loading" @click="save(0)"
+          >保存至草稿箱</el-button
+        >
+        <el-button type="danger" :loading="loading" @click="save(1)"
+          >提交审核</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
@@ -116,6 +120,7 @@ export default {
       headers: {
         authorization: "",
       },
+      loading: false,
     };
   },
   computed: {
@@ -172,19 +177,36 @@ export default {
     save(type) {
       this.$refs["articleForm"].validate((valid) => {
         if (valid) {
+          this.loading = true;
           const data = { ...this.articleForm };
           data.cover = data.cover.replace(process.env.VUE_APP_BASEURL, "");
           if (type === 1) {
             data.status = true;
           }
           if (this.id) {
-            article_put(this.id, data).then(() => {
-              this.$router.push("/articles/list");
-            });
+            article_put(this.id, data)
+              .then(() => {
+                this.$router.push("/articles/list");
+                this.$notify({
+                  title: "成功",
+                  type: "success",
+                });
+              })
+              .finally(() => {
+                this.loading = false;
+              });
           } else {
-            article_create(data).then(() => {
-              this.$router.push("/articles/list");
-            });
+            article_create(data)
+              .then(() => {
+                this.$router.push("/articles/list");
+                this.$notify({
+                  title: "成功",
+                  type: "success",
+                });
+              })
+              .finally(() => {
+                this.loading = false;
+              });
           }
         } else {
           console.log("error submit!!");

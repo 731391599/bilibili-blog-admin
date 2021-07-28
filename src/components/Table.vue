@@ -1,6 +1,12 @@
 <template>
   <div class="table-wrap">
-    <el-table :data="tableData" border stripe style="width: 100%">
+    <el-table
+      v-loading="loading"
+      :data="tableData"
+      border
+      stripe
+      style="width: 100%"
+    >
       <template v-for="column in options.columns">
         <el-table-column
           v-if="!column.scope"
@@ -131,6 +137,7 @@ export default {
       tableData: [],
       total: 0,
       articleStatus,
+      loading: false,
     };
   },
   mounted() {
@@ -146,15 +153,20 @@ export default {
       this.getList(queryObj);
     },
     getList(queryObj) {
+      this.loading = true;
       let data = { ...this.page };
       if (queryObj) {
         // 合并参数
         data = Object.assign(data, queryObj);
       }
-      apiList[this.options.api](data).then((res) => {
-        this.tableData = res.data.rows;
-        this.total = res.data.count;
-      });
+      apiList[this.options.api](data)
+        .then((res) => {
+          this.tableData = res.data.rows;
+          this.total = res.data.count;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     formatterTime(row, column, cellValue) {
       return parseTime(new Date(cellValue));

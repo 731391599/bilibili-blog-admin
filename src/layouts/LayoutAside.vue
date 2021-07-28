@@ -40,7 +40,6 @@ export default {
     routes() {
       // 这里只做了一层过滤 我们需要用递归
       const routes = this.filterRoutes(this.asyncRoutes);
-      console.log(routes);
       return routes;
     },
   },

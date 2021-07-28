@@ -65,6 +65,7 @@
           v-if="data.status === 0"
           size="small"
           type="primary"
+          :loading="toAuditLoadiing"
           @click="toAudit(data.id, 1)"
           >去审核</el-button
         >
@@ -72,12 +73,14 @@
           v-if="data.status === 1"
           size="small"
           type="warning"
+          :loading="toAuditLoadiing"
           @click="toAudit(data.id, 0)"
           >撤销审核</el-button
         >
         <el-button
           v-if="data.status === 2"
           size="small"
+          :loading="publishLoading"
           @click="publish(data.id, 1)"
           >发布</el-button
         >
@@ -85,6 +88,7 @@
           v-if="data.status === 4"
           size="small"
           type="danger"
+          :loading="publishLoading"
           @click="publish(data.id, 0)"
           >撤销发布</el-button
         >
@@ -197,6 +201,8 @@ export default {
         content: "",
         cover: "",
       },
+      toAuditLoadiing: false,
+      publishLoading: false,
     };
   },
   mounted() {
@@ -269,26 +275,45 @@ export default {
       }
     },
     publish(id, type) {
+      this.publishLoading = true;
       const body = {
         status: true,
       };
       if (!type) {
         body.status = false;
       }
-      article_publish(id, body).then(() => {
-        this.$refs["table"].init();
-      });
+      article_publish(id, body)
+        .then(() => {
+          this.$refs["table"].init();
+          this.$notify({
+            title: "成功",
+            type: "success",
+          });
+        })
+        .finally(() => {
+          this.publishLoading = false;
+        });
     },
     toAudit(id, type) {
+      this.toAuditLoadiing = true;
+
       const body = {
         status: true,
       };
       if (!type) {
         body.status = false;
       }
-      article_to_audit(id, body).then(() => {
-        this.$refs["table"].init();
-      });
+      article_to_audit(id, body)
+        .then(() => {
+          this.$refs["table"].init();
+          this.$notify({
+            title: "成功",
+            type: "success",
+          });
+        })
+        .finally(() => {
+          this.toAuditLoadiing = false;
+        });
     },
   },
 };

@@ -2,10 +2,11 @@ import request from "@/utils/request";
 
 const url = {
   article: "/article",
-  all: "article/all",
-  audit: "article/audit",
-  publish: "article/publish",
-  toAudit: "article/toAudit",
+  all: "/article/all",
+  audit: "/article/audit",
+  publish: "/article/publish",
+  toAudit: "/article/toAudit",
+  showHome: "/article/showHome",
 };
 
 // 管理员 所有文章接口
@@ -45,6 +46,14 @@ export function article_to_audit(id, data) {
 export function article_publish(id, data) {
   return request({
     url: `${url.publish}/${id}`,
+    method: "post",
+    data,
+  });
+}
+
+export function article_showHome(id, data) {
+  return request({
+    url: `${url.showHome}/${id}`,
     method: "post",
     data,
   });

@@ -43,13 +43,6 @@ export const routes = [
         hide: true,
         component: () => import("@/views/sys/mine"),
       },
-      // 先暂时卸载前端页面 后面放到数据库中 需要改表
-      {
-        path: "/articles/edit/:id",
-        hide: true,
-        component: () => import("@/views/sys/articles/edit"), // 与edit共用页面
-        props: true,
-      },
     ],
   },
 ];

@@ -12,7 +12,7 @@ Vue.use(VueRouter);
 // 路由
 // 路由配置
 // 我们先默认写死路由 后面会根据接口动态分配路由
-const routes = [
+export const routes = [
   {
     path: "/login", // 路由的路径
     name: "Login",
@@ -42,6 +42,13 @@ const routes = [
         name: "Mine",
         hide: true,
         component: () => import("@/views/sys/mine"),
+      },
+      // 先暂时卸载前端页面 后面放到数据库中 需要改表
+      {
+        path: "/articles/edit/:id",
+        hide: true,
+        component: () => import("@/views/sys/articles/edit"), // 与edit共用页面
+        props: true,
       },
     ],
   },

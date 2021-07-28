@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { public_province, public_city, public_area } from "@/api/public";
 import { app_update_userInfo } from "@/api/app";
 export default {
@@ -55,11 +55,26 @@ export default {
       ruleForm: {
         name: "",
         mobile: "",
+        provinceId: "",
+        cityId: "",
+        areaId: "",
+        avatar: "",
       },
       rules: {
-        name: [{ required: true, message: "昵称不能为空", trigger: "blur" }],
+        name: [
+          {
+            required: true,
+            message: "昵称不能为空",
+            trigger: "blur",
+          },
+        ],
         mobile: [
-          { min: 11, max: 11, message: "手机号格式不正确", trigger: "blur" },
+          {
+            min: 11,
+            max: 11,
+            message: "手机号格式不正确",
+            trigger: "blur",
+          },
         ],
       },
       props: {
@@ -80,14 +95,15 @@ export default {
     this.initData();
   },
   methods: {
+    ...mapActions(["SET_USER_INFO"]),
     initData() {
-      this.ruleForm = {
-        name: this.user_info.name,
-        mobile: this.user_info.mobile,
-        provinceId: this.user_info.provinceId,
-        cityId: this.user_info.cityId,
-        areaId: this.user_info.areaId,
-      };
+      // bug  定位
+      // 这里直接改变的对象的指向 无法双向绑定 可以使用$set 或者赋值
+      this.ruleForm.name = this.user_info.name;
+      this.ruleForm.mobile = this.user_info.mobile;
+      this.ruleForm.provinceId = this.user_info.provinceId;
+      this.ruleForm.cityId = this.user_info.cityId;
+      this.ruleForm.areaId = this.user_info.areaId;
       if (this.user_info.avatar) {
         this.ruleForm.avatar =
           process.env.VUE_APP_BASEURL + this.user_info.avatar;
@@ -163,8 +179,8 @@ export default {
           data.provinceId = this.region[0];
           data.cityId = this.region[1];
           data.areaId = this.region[2];
-          app_update_userInfo(this.user_info.userId, data).then((res) => {
-            console.log(res);
+          app_update_userInfo(this.user_info.userId, data).then(() => {
+            this.SET_USER_INFO(this.user_info.userId);
           });
         } else {
           console.log("error submit!!");

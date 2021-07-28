@@ -67,7 +67,8 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import { category_list } from "@/api/category";
 import { mapGetters } from "vuex";
-import { article_create } from "@/api/article";
+import { article_create, article_show, article_put } from "@/api/article";
+
 export default {
   components: { Breadcrumb },
   data() {
@@ -102,6 +103,7 @@ export default {
       ],
     };
     return {
+      id: "", // 有id 则是修改 无id则是新增
       articleForm: {
         title: "",
         cover: "",
@@ -119,6 +121,11 @@ export default {
   computed: {
     ...mapGetters(["token"]),
   },
+  created() {
+    if (this.$route.params.id) {
+      this.id = this.$route.params.id;
+    }
+  },
   mounted() {
     this.init();
   },
@@ -126,6 +133,15 @@ export default {
     init() {
       this.getCategory();
       this.headers.authorization = this.token;
+      if (this.id) {
+        article_show(this.id).then((res) => {
+          const data = res.data;
+          this.articleForm.title = data.title;
+          this.articleForm.cover = process.env.VUE_APP_BASEURL + data.cover;
+          this.articleForm.content = data.content;
+          this.articleForm.categoryId = data.categoryId;
+        });
+      }
     },
     getCategory() {
       // 这个接口做了分页
@@ -161,9 +177,15 @@ export default {
           if (type === 1) {
             data.status = true;
           }
-          article_create(data).then(() => {
-            this.$router.push("/articles/list");
-          });
+          if (this.id) {
+            article_put(this.id, data).then(() => {
+              this.$router.push("/articles/list");
+            });
+          } else {
+            article_create(data).then(() => {
+              this.$router.push("/articles/list");
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;

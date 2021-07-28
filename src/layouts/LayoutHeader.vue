@@ -42,7 +42,7 @@
           <i class="el-icon-user"></i>
           <span>个人中心</span>
         </div>
-        <div class="cursor">
+        <div class="cursor" @click="logout">
           <i class="el-icon-switch-button"></i>
           <span>登出</span>
         </div>
@@ -74,7 +74,7 @@ export default {
     this.clearTime();
   },
   methods: {
-    ...mapActions(["CHANGE_COLLAPSE"]),
+    ...mapActions(["CHANGE_COLLAPSE", "LOGOUT"]),
     upDateTime() {
       this.clearTime();
       this.timer = setInterval(() => {
@@ -90,6 +90,10 @@ export default {
     toMine() {
       this.$refs.drawer.closeDrawer();
       this.$router.push("/mine");
+    },
+    logout() {
+      this.LOGOUT();
+      this.$router.push("/login");
     },
   },
 };

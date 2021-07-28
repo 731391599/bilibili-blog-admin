@@ -12,6 +12,7 @@ router.beforeEach(async (to, from, next) => {
       const userInfo = store.getters.user_info;
       // 获取vuex中的路由
       const asyncRoutes = store.getters.asyncRoutes;
+      //   这里是空的  先注释
       if (userInfo.userId && asyncRoutes.length) {
         next();
       } else {

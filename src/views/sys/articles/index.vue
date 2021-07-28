@@ -47,7 +47,7 @@
 
       <el-col :span="4" :offset="2">
         <el-button type="info" @click="handleSearch('all')">查看全部</el-button>
-        <el-button type="primary">新增文章</el-button>
+        <el-button type="primary" @click="createArticle">新增文章</el-button>
       </el-col>
     </el-row>
     <Table
@@ -56,24 +56,42 @@
       @handleInfo="handleInfo"
       @handleEdit="handleEdit"
       @handleRemove="handleRemove"
-    />
-    <!-- 删除 -->
-    <el-dialog
-      :visible.sync="removeVisible"
-      width="30%"
-      :before-close="
-        () => {
-          removeVisible = false;
-        }
-      "
-      :show-close="false"
     >
-      <span>是否删除该条数据?</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="removeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="removeArticle">确 定</el-button>
-      </span>
-    </el-dialog>
+      <template v-slot:showHome="{ data }">
+        <el-tag v-if="data.showHome == 1" size="medium">展示</el-tag>
+      </template>
+      <template v-slot:publish="{ data }">
+        <el-button
+          v-if="data.status === 0"
+          size="small"
+          type="primary"
+          @click="toAudit(data.id, 1)"
+          >去审核</el-button
+        >
+        <el-button
+          v-if="data.status === 1"
+          size="small"
+          type="warning"
+          @click="toAudit(data.id, 0)"
+          >撤销审核</el-button
+        >
+        <el-button
+          v-if="data.status === 2"
+          size="small"
+          @click="publish(data.id, 1)"
+          >发布</el-button
+        >
+        <el-button
+          v-if="data.status === 4"
+          size="small"
+          type="danger"
+          @click="publish(data.id, 0)"
+          >撤销发布</el-button
+        >
+      </template>
+    </Table>
+    <!-- 删除 -->
+    <RemoveDialog :visible.sync="removeVisible" @handleRemove="removeArticle" />
     <!-- 详情 -->
     <el-dialog
       :visible.sync="visible"
@@ -116,17 +134,25 @@
 <script>
 import Breadcrumb from "@/components/Breadcrumb";
 import Table from "@/components/Table";
+import RemoveDialog from "@/components/RemoveDialog";
 import { category_list } from "@/api/category";
-import { article_delete, article_show } from "@/api/article";
+import {
+  article_delete,
+  article_show,
+  article_publish,
+  article_to_audit,
+} from "@/api/article";
 export default {
-  components: { Breadcrumb, Table },
+  components: { Breadcrumb, Table, RemoveDialog },
   data() {
     const options = {
       columns: [
         { prop: "actions", label: "操作", scope: "actions" },
+        { prop: "publish", label: "发布/审核", scope: "publish" },
         { prop: "id", label: "ID" },
         { prop: "title", label: "标题" },
         { prop: "status", label: "状态", scope: "article-status" },
+        { prop: "showHome", label: "首页展示", scope: "showHome" },
         { prop: "createdAt", label: "创建时间", formatter: "time" },
         { prop: "updatedAt", label: "更新时间", formatter: "time" },
       ],
@@ -188,10 +214,15 @@ export default {
         this.visible = true;
       });
     },
-    handleEdit() {},
+    handleEdit(item) {
+      this.$router.push(`/articles/edit/${item.id}`);
+    },
     handleRemove(item) {
       this.removeVisible = true;
       this.chooseId = item.id;
+    },
+    createArticle() {
+      this.$router.push("/articles/add");
     },
     removeArticle() {
       // ... 接口
@@ -236,6 +267,28 @@ export default {
         }
         this.$refs["table"].init(queryObj);
       }
+    },
+    publish(id, type) {
+      const body = {
+        status: true,
+      };
+      if (!type) {
+        body.status = false;
+      }
+      article_publish(id, body).then(() => {
+        this.$refs["table"].init();
+      });
+    },
+    toAudit(id, type) {
+      const body = {
+        status: true,
+      };
+      if (!type) {
+        body.status = false;
+      }
+      article_to_audit(id, body).then(() => {
+        this.$refs["table"].init();
+      });
     },
   },
 };

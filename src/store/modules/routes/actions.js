@@ -1,5 +1,6 @@
 import { SET_ROUTES } from "./constant";
 import { route_list } from "@/api/routes";
+import { routes } from "@/router";
 const actions = {
   [SET_ROUTES]({ commit }, data) {
     return new Promise((resolve, reject) => {
@@ -7,8 +8,11 @@ const actions = {
         .then((res) => {
           // 处理路由 过滤参数
           const asyncRoutes = filterAsyncRoutes(res.data);
+          // 整合路由
+          let oldRoute = routes[1].children;
+          oldRoute = oldRoute.concat(asyncRoutes);
           // 存路由
-          commit(SET_ROUTES, asyncRoutes);
+          commit(SET_ROUTES, oldRoute);
           resolve(asyncRoutes);
         })
         .catch((e) => {

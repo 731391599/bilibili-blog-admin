@@ -2,7 +2,7 @@
   <div>
     <Breadcrumb />
     <div class="query-wrap">
-      <el-button type="primary" @click="handleCreate">新增用户</el-button>
+      <el-button type="primary" @click="handleCreate">新增分类</el-button>
     </div>
     <Table
       :options="options"
@@ -10,22 +10,7 @@
       @handleEdit="handleEdit"
       @handleRemove="handleRemove"
     />
-    <el-dialog
-      :visible.sync="removeVisible"
-      width="30%"
-      :before-close="
-        () => {
-          removeVisible = false;
-        }
-      "
-      :show-close="false"
-    >
-      <span>是否删除该条数据?</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="removeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="remvoveCategory">确 定</el-button>
-      </span>
-    </el-dialog>
+    <RemoveDialog :visible="removeVisible" @handleRemove="remvoveCategory" />
     <el-dialog
       :visible.sync="visible"
       width="30%"
@@ -63,9 +48,10 @@
 <script>
 import Breadcrumb from "@/components/Breadcrumb";
 import Table from "@/components/Table";
+import RemoveDialog from "@/components/RemoveDialog";
 import { category_delete, category_create, category_put } from "@/api/category";
 export default {
-  components: { Breadcrumb, Table },
+  components: { Breadcrumb, Table, RemoveDialog },
   data() {
     const options = {
       columns: [

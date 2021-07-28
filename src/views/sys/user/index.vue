@@ -81,22 +81,9 @@
         <el-button type="primary" @click="handleUseredit">修改</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      :visible.sync="removeVisible"
-      width="30%"
-      :before-close="
-        () => {
-          removeVisible = false;
-        }
-      "
-      :show-close="false"
-    >
-      <span>是否删除该条数据?</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="removeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleUserRemove">确 定</el-button>
-      </span>
-    </el-dialog>
+    <!-- 封装删除的dialog -->
+    <!-- 使用.sync -->
+    <RemoveDialog :visible.sync="removeVisible" @handleRemove="removeUser" />
     <el-dialog
       :visible.sync="createVisible"
       width="30%"
@@ -125,11 +112,12 @@
 <script>
 import Breadcrumb from "@/components/Breadcrumb";
 import Table from "@/components/Table";
+import RemoveDialog from "@/components/RemoveDialog";
 import { user_show, user_put, user_delete, user_create } from "@/api/user";
 import { parseTime } from "@/utils";
 
 export default {
-  components: { Breadcrumb, Table },
+  components: { Breadcrumb, Table, RemoveDialog },
   data() {
     const options = {
       columns: [
@@ -215,7 +203,7 @@ export default {
       this.removeId = item.id;
       this.removeVisible = true;
     },
-    handleUserRemove() {
+    removeUser() {
       user_delete(this.removeId).then(() => {
         this.removeVisible = false;
         this.removeId = "";

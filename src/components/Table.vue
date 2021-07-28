@@ -23,7 +23,6 @@
               <el-tag v-if="scope.row.status == 1" size="medium">启用</el-tag>
               <el-tag v-else type="danger" size="medium">禁用</el-tag>
             </template>
-
             <template v-if="column.scope === 'article-status'">
               <el-tag
                 size="medium"
@@ -56,6 +55,10 @@
                 circle
                 @click="handleRemove(scope.row)"
               ></el-button>
+            </template>
+            <!-- 其他自定义形式的数据展示 通过插槽的形式在外部实现 -->
+            <template v-else slot-scope="scope">
+              <slot :name="column.scope" :data="scope.row"></slot>
             </template>
           </template>
         </el-table-column>

@@ -75,6 +75,14 @@
         <el-form-item label="重定向路径" prop="redirect">
           <el-input v-model="menuForm.redirect"></el-input>
         </el-form-item>
+        <el-form-item label="是否隐藏" prop="hide">
+          <el-radio v-model="menuForm.hide" :label="1">隐藏</el-radio>
+          <el-radio v-model="menuForm.hide" :label="0">显示</el-radio>
+        </el-form-item>
+        <el-form-item label="是否可以接收参数" prop="props">
+          <el-radio v-model="menuForm.props" :label="1">接收</el-radio>
+          <el-radio v-model="menuForm.props" :label="0">不接收</el-radio>
+        </el-form-item>
         <el-form-item label="权限" prop="roleLevel">
           <el-checkbox-group v-model="menuForm.roleLevel">
             <el-checkbox :label="3">admin</el-checkbox>
@@ -141,6 +149,8 @@ export default {
         pid: 0,
         roleLevel: [1, 2, 3],
         redirect: "",
+        hide: 0,
+        props: 0,
       },
       removeVisible: false,
       chooseId: 0,
@@ -208,6 +218,8 @@ export default {
       this.menuForm.pid = data.pid;
       this.menuForm.roleLevel = JSON.parse(data.roleLevel);
       this.menuForm.redirect = data.redirect;
+      this.menuForm.hide = data.hide;
+      this.menuForm.props = data.props;
     },
     editMenu() {
       this.$refs["menuForm"].validate((valid) => {
@@ -231,6 +243,8 @@ export default {
         pid: 0,
         roleLevel: [1, 2, 3],
         redirect: "",
+        hide: 0,
+        props: 0,
       };
     },
     hideRemoveVisible() {

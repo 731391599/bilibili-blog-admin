@@ -4,7 +4,8 @@ const url = {
   article: "/article",
   all: "article/all",
   audit: "article/audit",
-  publish: "article/audit/publish",
+  publish: "article/publish",
+  toAudit: "article/toAudit",
 };
 
 // 管理员 所有文章接口
@@ -28,6 +29,14 @@ export function article_list(params) {
 export function article_audit(id, data) {
   return request({
     url: `${url.audit}/${id}`,
+    method: "post",
+    data,
+  });
+}
+
+export function article_to_audit(id, data) {
+  return request({
+    url: `${url.toAudit}/${id}`,
     method: "post",
     data,
   });

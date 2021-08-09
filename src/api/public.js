@@ -4,6 +4,7 @@ const URL = {
   province: "/province",
   city: "/city",
   area: "/area",
+  upload: "/upload/img",
 };
 
 export function public_province() {
@@ -24,5 +25,13 @@ export function public_area(id) {
   return request({
     url: `${URL.area}/${id}`,
     method: "get",
+  });
+}
+
+export function public_upload(formData) {
+  return request({
+    url: URL.upload,
+    method: "post",
+    data: formData,
   });
 }

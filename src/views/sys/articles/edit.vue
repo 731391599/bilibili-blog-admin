@@ -53,7 +53,12 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <mavon-editor v-model="articleForm.content" />
+        <mavon-editor
+          ref="mavon"
+          v-model="articleForm.content"
+          @imgAdd="imgAdd"
+          @imgDel="imgDel"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="loading" @click="save(0)"
@@ -72,7 +77,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { category_list } from "@/api/category";
 import { mapGetters } from "vuex";
 import { article_create, article_show, article_put } from "@/api/article";
-
+import { public_upload } from "@/api/public";
 export default {
   components: { Breadcrumb },
   data() {
@@ -126,15 +131,26 @@ export default {
   computed: {
     ...mapGetters(["token"]),
   },
+  watch: {
+    "$route.path"(n) {
+      if (n === "/articles/add") {
+        this.initData();
+      }
+    },
+  },
   created() {
     if (this.$route.params.id) {
       this.id = this.$route.params.id;
+      this.init();
     }
   },
-  mounted() {
-    this.init();
-  },
   methods: {
+    initData() {
+      this.articleForm.title = "";
+      this.articleForm.cover = "";
+      this.articleForm.content = "";
+      this.articleForm.categoryId = "";
+    },
     init() {
       this.getCategory();
       this.headers.authorization = this.token;
@@ -213,6 +229,18 @@ export default {
           return false;
         }
       });
+    },
+    imgAdd(pos, file) {
+      const formdata = new FormData();
+      formdata.append("blogImg", file);
+      public_upload(formdata).then((res) => {
+        const url = process.env.VUE_APP_BASEURL + res.data.url;
+        this.$refs["mavon"].$img2Url(pos, url);
+      });
+    },
+    imgDel(pos) {
+      console.log(pos);
+      // 不需要处理服务器上不需要的图片
     },
   },
 };

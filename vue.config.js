@@ -20,8 +20,7 @@ const px2remOptions = {
 // 线上引入cdn资源
 // 开发 本地资源
 // 是否为生产模式
-console.log(process.env);
-const isProd = process.env?.NODE_ENV?.startsWith("prod");
+const isProd = process.env.NODE_ENV.startsWith("prod");
 
 const externals = {
   "element-ui": "ELEMENT",
